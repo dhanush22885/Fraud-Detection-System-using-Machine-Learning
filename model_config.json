@@ -1,0 +1,53 @@
+{
+    "numeric_features": [
+        "amount",
+        "vpa_age_days",
+        "num_prev_txns_24h",
+        "avg_amount_7d",
+        "failed_pin_attempts",
+        "location_lat",
+        "location_long",
+        "hour",
+        "day_of_week",
+        "sender_upi_len",
+        "sender_upi_local_len",
+        "sender_upi_has_digits",
+        "sender_upi_suspicious",
+        "receiver_upi_len",
+        "receiver_upi_local_len",
+        "receiver_upi_has_digits",
+        "receiver_upi_suspicious",
+        "is_recipient_new",
+        "same_device_flag"
+    ],
+    "categorical_features": [
+        "txn_type",
+        "channel",
+        "merchant_category",
+        "sender_upi_handle",
+        "receiver_upi_handle"
+    ],
+    "dropdown_options": {
+        "txn_type": [
+            "payment",
+            "request"
+        ],
+        "channel": [
+            "app",
+            "collect",
+            "merchant_sdk",
+            "qr"
+        ],
+        "merchant_category": [
+            "bill_payment",
+            "electronics",
+            "fashion",
+            "food_delivery",
+            "grocery",
+            "others",
+            "recharge",
+            "travel",
+            "utilities"
+        ]
+    }
+}
