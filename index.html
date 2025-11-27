@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI Transaction Fraud Detector</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom scrollbar for aesthetics */
+        body::-webkit-scrollbar { width: 8px; }
+        body::-webkit-scrollbar-track { background: #f1f1f1; }
+        body::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        body { font-family: 'Inter', sans-serif; background-color: #f4f6f8; }
+    </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-4">
+    <div class="w-full max-w-xl bg-white rounded-xl shadow-2xl p-6 md:p-10 border border-gray-100">
+        <h2 class="text-3xl font-extrabold text-center text-indigo-700 mb-6">
+            UPI Fraud Detector
+        </h2>
+        <p class="text-center text-gray-500 mb-8">Analyze transaction risk using hard rules and anomaly detection.</p>
+        
+        <form action="/predict" method="post">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                
+                <!-- ROW 1: UPI IDs -->
+                <div class="col-span-1 sm:col-span-2 space-y-4 md:space-y-0 md:grid md:grid-cols-2 md:gap-4">
+                    <div class="form-group">
+                        <label for="sender_upi" class="block text-sm font-medium text-gray-700 mb-1">Sender UPI</label>
+                        <input type="text" id="sender_upi" name="sender_upi" value="user123@oksbi" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                    </div>
+                    <div class="form-group">
+                        <label for="receiver_upi" class="block text-sm font-medium text-gray-700 mb-1">Receiver UPI</label>
+                        <input type="text" id="receiver_upi" name="receiver_upi" value="merchant.support@okhdfc" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                    </div>
+                </div>
+
+                <!-- ROW 2: Amount & Txn Type -->
+                <div class="form-group">
+                    <label for="amount" class="block text-sm font-medium text-gray-700 mb-1">Amount (INR)</label>
+                    <input type="number" step="0.01" id="amount" name="amount" value="5500.75" required class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                </div>
+
+                <div class="form-group">
+                    <label for="txn_type" class="block text-sm font-medium text-gray-700 mb-1">Transaction Type</label>
+                    <select id="txn_type" name="txn_type" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                        <!-- Options populated by Flask -->
+                        {% for ttype in options.txn_type %}
+                            <option value="{{ ttype }}">{{ ttype|capitalize }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                
+                <!-- ROW 3: VPA Age & Prev Txns -->
+                <div class="form-group">
+                    <label for="vpa_age_days" class="block text-sm font-medium text-gray-700 mb-1">Sender VPA Age (days)</label>
+                    <input type="number" id="vpa_age_days" name="vpa_age_days" value="30" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                </div>
+
+                <div class="form-group">
+                    <label for="num_prev_txns_24h" class="block text-sm font-medium text-gray-700 mb-1">Previous Txns (24h)</label>
+                    <input type="number" id="num_prev_txns_24h" name="num_prev_txns_24h" value="15" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                </div>
+
+                <!-- ROW 4: Failed PINs & Recipient New -->
+                <div class="form-group">
+                    <label for="failed_pin_attempts" class="block text-sm font-medium text-gray-700 mb-1">Failed PIN Attempts</label>
+                    <input type="number" id="failed_pin_attempts" name="failed_pin_attempts" value="0" class="w-full p-3 border border-gray-300 rounded-lg focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                </div>
+
+                <div class="form-group">
+                    <label for="is_recipient_new" class="block text-sm font-medium text-gray-700 mb-1">Is Recipient New? (1=Yes, 0=No)</label>
+                    <select id="is_recipient_new" name="is_recipient_new" class="w-full p-3 border border-gray-300 rounded-lg bg-white focus:ring-indigo-500 focus:border-indigo-500 transition duration-150">
+                        <option value="1">1 - Yes (New)</option>
+                        <option value="0" selected>0 - No (Existing)</option>
+                    </select>
+                </div>
+
+              
+                <input type="hidden" name="location_lat" value="0.0">
+                <input type="hidden" name="location_long" value="0.0">
+                <input type="hidden" name="avg_amount_7d" value="5000.00">
+                <input type="hidden" name="channel" value="mobile">
+                <input type="hidden" name="merchant_category" value="ecommerce">
+
+                <!-- Submit Button -->
+                <button type="submit" class="col-span-1 sm:col-span-2 mt-4 p-3 bg-indigo-600 text-white font-semibold rounded-lg hover:bg-indigo-700 transition duration-200 shadow-md transform hover:scale-[1.01]">
+                    Analyze Transaction Risk
+                </button>
+            </div>
+        </form>
+    </div>
+</body>
+</html>
